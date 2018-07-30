@@ -1,0 +1,22 @@
+﻿@model UGSKFirst.Models.Page.InterviewListPageModel
+
+@{
+    ViewBag.Title = "Список выполненных тестов";
+    Layout = "../Shared/_Layout.cshtml";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<table>
+    <tr>
+        <th>Id</th>
+        <th>Тест</th>
+    </tr>
+    @foreach (var iInterview in Model.Interviews)
+    {
+        <tr>
+            <td>@iInterview.Id</td>
+            <td>@Html.ActionLink(iInterview.InterviewTemplate.Name, "Show", "Interview", new { InterviewId = iInterview.Id }, null)</td>
+        </tr>
+    }
+</table>

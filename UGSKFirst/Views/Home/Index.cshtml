@@ -1,0 +1,18 @@
+﻿@model List<UGSKFirst.DB.InterviewTemplate>
+
+@{
+    ViewBag.Title = "Личный кабинет";
+    Layout = "../Shared/_Layout.cshtml";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<p>@Html.ActionLink("К списку выполненых тестов", "Index", "Interview")</p>
+
+<p>Выполнить тест:</p>
+@foreach (var i in @Model)
+{
+    <div>
+        @Html.ActionLink(i.Name, "Create", "Interview", new { templateId = i.Id }, null)
+    </div>
+}

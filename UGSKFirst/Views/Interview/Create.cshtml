@@ -1,0 +1,64 @@
+﻿@model UGSKFirst.Models.InterviewCreatePageModel
+
+@{
+    ViewBag.Title = "title";
+}
+
+<h2>Тест: @Model.InterviewTemplate.Name</h2>
+
+@using (Html.BeginForm("Create", "Interview", FormMethod.Post))
+{
+    @Html.HiddenFor(x => Model.InterviewTemplate.Id)
+
+
+    for (int i = 0; i < @Model.Answers.Count; i++)
+    {
+        @Html.HiddenFor(x => Model.Answers[i].Question.Type)
+        @Html.HiddenFor(x => Model.Answers[i].Question.Id)
+
+<div class="form-group">
+
+    @Html.Label(Model.Answers[i].Question.QuestionTxt)
+
+    @if (@Model.Answers[i].Question.Type == 1)
+    {
+
+        @Html.TextBoxFor(x => Model.Answers[i].AnswerTxt, new { @class = "form-control" })
+
+    }
+    else if (@Model.Answers[i].Question.Type == 2)
+    {
+        for (int j = 0; j < Model.Answers[i].AnswerOptions.Count; j++)
+        {
+
+
+            <div>
+                @Model.Answers[i].AnswerOptions[j].QuestionOption.OptionTxt
+
+                @Html.RadioButtonFor(x => @Model.Answers[i].SelectedOption, Model.Answers[i].AnswerOptions[j].QuestionOption.Id)
+            </div>
+        }
+    }
+    else if (@Model.Answers[i].Question.Type == 3)
+    {
+        for (int j = 0; j < Model.Answers[i].AnswerOptions.Count; j++)
+        {
+            @Html.HiddenFor(x => Model.Answers[i].AnswerOptions[j].QuestionOptionId)
+
+            <div>
+                @Model.Answers[i].AnswerOptions[j].QuestionOption.OptionTxt
+                @Model.Answers[i].AnswerOptions[j].QuestionOption.Id
+
+                @Html.CheckBoxFor(x => @Model.Answers[i].AnswerOptions[j].isSelected)
+            </div>
+        }
+    }
+</div>
+
+    }
+
+
+    <div>
+        <input type="submit" value="Сохранить" />
+    </div>
+}

@@ -1,0 +1,485 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Answer">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="QuestionId" Type="int" Nullable="false" />
+          <Property Name="AnswerTxt" Type="nvarchar(max)" />
+          <Property Name="SelectedOptionId" Type="int" />
+          <Property Name="InterviewId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="AnswerSelectedOption">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="AnswerId" Type="int" Nullable="false" />
+          <Property Name="OptionId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Interview">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserId" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="InterviewTemplateId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="InterviewTemplate">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="1024" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Question">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="QuestionTxt" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Type" Type="int" Nullable="false" />
+          <Property Name="InterviewTemplateId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="QuestionOption">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="QuestionId" Type="int" Nullable="false" />
+          <Property Name="OptionTxt" Type="nvarchar(max)" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Answer_ToInterview">
+          <End Role="Interview" Type="Self.Interview" Multiplicity="1" />
+          <End Role="Answer" Type="Self.Answer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Interview">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Answer">
+              <PropertyRef Name="InterviewId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Answer_ToQuestion">
+          <End Role="Question" Type="Self.Question" Multiplicity="1" />
+          <End Role="Answer" Type="Self.Answer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Question">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Answer">
+              <PropertyRef Name="QuestionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Answer_ToQuestionOption">
+          <End Role="QuestionOption" Type="Self.QuestionOption" Multiplicity="0..1" />
+          <End Role="Answer" Type="Self.Answer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="QuestionOption">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Answer">
+              <PropertyRef Name="SelectedOptionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AnswerSelectedOption_ToAnswer">
+          <End Role="Answer" Type="Self.Answer" Multiplicity="1" />
+          <End Role="AnswerSelectedOption" Type="Self.AnswerSelectedOption" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Answer">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AnswerSelectedOption">
+              <PropertyRef Name="AnswerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AnswerSelectedOption_ToQuestionOption">
+          <End Role="QuestionOption" Type="Self.QuestionOption" Multiplicity="1" />
+          <End Role="AnswerSelectedOption" Type="Self.AnswerSelectedOption" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="QuestionOption">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AnswerSelectedOption">
+              <PropertyRef Name="OptionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Interview_ToTemplate">
+          <End Role="InterviewTemplate" Type="Self.InterviewTemplate" Multiplicity="1" />
+          <End Role="Interview" Type="Self.Interview" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="InterviewTemplate">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Interview">
+              <PropertyRef Name="InterviewTemplateId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Question_ToInterviewTemplate">
+          <End Role="InterviewTemplate" Type="Self.InterviewTemplate" Multiplicity="1" />
+          <End Role="Question" Type="Self.Question" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="InterviewTemplate">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Question">
+              <PropertyRef Name="InterviewTemplateId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_QuestionOption_ToQuestion">
+          <End Role="Question" Type="Self.Question" Multiplicity="1" />
+          <End Role="QuestionOption" Type="Self.QuestionOption" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Question">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="QuestionOption">
+              <PropertyRef Name="QuestionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="ModelStoreContainer">
+          <EntitySet Name="Answer" EntityType="Self.Answer" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AnswerSelectedOption" EntityType="Self.AnswerSelectedOption" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Interview" EntityType="Self.Interview" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="InterviewTemplate" EntityType="Self.InterviewTemplate" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Question" EntityType="Self.Question" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="QuestionOption" EntityType="Self.QuestionOption" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Answer_ToInterview" Association="Self.FK_Answer_ToInterview">
+            <End Role="Interview" EntitySet="Interview" />
+            <End Role="Answer" EntitySet="Answer" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Answer_ToQuestion" Association="Self.FK_Answer_ToQuestion">
+            <End Role="Question" EntitySet="Question" />
+            <End Role="Answer" EntitySet="Answer" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Answer_ToQuestionOption" Association="Self.FK_Answer_ToQuestionOption">
+            <End Role="QuestionOption" EntitySet="QuestionOption" />
+            <End Role="Answer" EntitySet="Answer" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AnswerSelectedOption_ToAnswer" Association="Self.FK_AnswerSelectedOption_ToAnswer">
+            <End Role="Answer" EntitySet="Answer" />
+            <End Role="AnswerSelectedOption" EntitySet="AnswerSelectedOption" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AnswerSelectedOption_ToQuestionOption" Association="Self.FK_AnswerSelectedOption_ToQuestionOption">
+            <End Role="QuestionOption" EntitySet="QuestionOption" />
+            <End Role="AnswerSelectedOption" EntitySet="AnswerSelectedOption" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Interview_ToTemplate" Association="Self.FK_Interview_ToTemplate">
+            <End Role="InterviewTemplate" EntitySet="InterviewTemplate" />
+            <End Role="Interview" EntitySet="Interview" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Question_ToInterviewTemplate" Association="Self.FK_Question_ToInterviewTemplate">
+            <End Role="InterviewTemplate" EntitySet="InterviewTemplate" />
+            <End Role="Question" EntitySet="Question" />
+          </AssociationSet>
+          <AssociationSet Name="FK_QuestionOption_ToQuestion" Association="Self.FK_QuestionOption_ToQuestion">
+            <End Role="Question" EntitySet="Question" />
+            <End Role="QuestionOption" EntitySet="QuestionOption" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="Entities" annotation:LazyLoadingEnabled="true" >
+          <EntitySet Name="InterviewTemplate" EntityType="Model.InterviewTemplate" />
+          <EntitySet Name="Interview" EntityType="Model.Interview" />
+          <AssociationSet Name="FK_Interview_ToTemplate" Association="Model.FK_Interview_ToTemplate">
+            <End Role="InterviewTemplate" EntitySet="InterviewTemplate" />
+            <End Role="Interview" EntitySet="Interview" />
+          </AssociationSet>
+          <EntitySet Name="Question" EntityType="Model.Question" />
+          <AssociationSet Name="FK_Question_ToInterviewTemplate" Association="Model.FK_Question_ToInterviewTemplate">
+            <End Role="InterviewTemplate" EntitySet="InterviewTemplate" />
+            <End Role="Question" EntitySet="Question" />
+          </AssociationSet>
+          <EntitySet Name="QuestionOption" EntityType="Model.QuestionOption" />
+          <AssociationSet Name="FK_QuestionOption_ToQuestion" Association="Model.FK_QuestionOption_ToQuestion">
+            <End Role="Question" EntitySet="Question" />
+            <End Role="QuestionOption" EntitySet="QuestionOption" />
+          </AssociationSet>
+          <EntitySet Name="Answer" EntityType="Model.Answer" />
+          <EntitySet Name="AnswerSelectedOption" EntityType="Model.AnswerSelectedOption" />
+          <AssociationSet Name="FK_Answer_ToQuestion" Association="Model.FK_Answer_ToQuestion">
+            <End Role="Question" EntitySet="Question" />
+            <End Role="Answer" EntitySet="Answer" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AnswerSelectedOption_ToAnswer" Association="Model.FK_AnswerSelectedOption_ToAnswer">
+            <End Role="Answer" EntitySet="Answer" />
+            <End Role="AnswerSelectedOption" EntitySet="AnswerSelectedOption" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AnswerSelectedOption_ToQuestionOption" Association="Model.FK_AnswerSelectedOption_ToQuestionOption">
+            <End Role="QuestionOption" EntitySet="QuestionOption" />
+            <End Role="AnswerSelectedOption" EntitySet="AnswerSelectedOption" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Answer_ToInterview" Association="Model.FK_Answer_ToInterview">
+            <End Role="Interview" EntitySet="Interview" />
+            <End Role="Answer" EntitySet="Answer" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Answer_ToQuestionOption" Association="Model.FK_Answer_ToQuestionOption">
+            <End Role="QuestionOption" EntitySet="QuestionOption" />
+            <End Role="Answer" EntitySet="Answer" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="InterviewTemplate">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="1024" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Interview" Relationship="Model.FK_Interview_ToTemplate" FromRole="InterviewTemplate" ToRole="Interview" />
+          <NavigationProperty Name="Questions" Relationship="Model.FK_Question_ToInterviewTemplate" FromRole="InterviewTemplate" ToRole="Question" />
+        </EntityType>
+        <EntityType Name="Interview">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="UserId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="InterviewTemplateId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="InterviewTemplate" Relationship="Model.FK_Interview_ToTemplate" FromRole="Interview" ToRole="InterviewTemplate" />
+          <NavigationProperty Name="Answer" Relationship="Model.FK_Answer_ToInterview" FromRole="Interview" ToRole="Answer" />
+        </EntityType>
+        <Association Name="FK_Interview_ToTemplate">
+          <End Type="Model.InterviewTemplate" Role="InterviewTemplate" Multiplicity="1" />
+          <End Type="Model.Interview" Role="Interview" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="InterviewTemplate">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Interview">
+              <PropertyRef Name="InterviewTemplateId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Question">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="QuestionTxt" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Type" Type="Int32" Nullable="false" />
+          <Property Name="InterviewTemplateId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="InterviewTemplate" Relationship="Model.FK_Question_ToInterviewTemplate" FromRole="Question" ToRole="InterviewTemplate" />
+          <NavigationProperty Name="QuestionOption" Relationship="Model.FK_QuestionOption_ToQuestion" FromRole="Question" ToRole="QuestionOption" />
+          <NavigationProperty Name="Answer" Relationship="Model.FK_Answer_ToQuestion" FromRole="Question" ToRole="Answer" />
+        </EntityType>
+        <Association Name="FK_Question_ToInterviewTemplate">
+          <End Type="Model.InterviewTemplate" Role="InterviewTemplate" Multiplicity="1" />
+          <End Type="Model.Question" Role="Question" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="InterviewTemplate">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Question">
+              <PropertyRef Name="InterviewTemplateId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="QuestionOption">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="QuestionId" Type="Int32" Nullable="false" />
+          <Property Name="OptionTxt" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Question" Relationship="Model.FK_QuestionOption_ToQuestion" FromRole="QuestionOption" ToRole="Question" />
+          <NavigationProperty Name="AnswerSelectedOption" Relationship="Model.FK_AnswerSelectedOption_ToQuestionOption" FromRole="QuestionOption" ToRole="AnswerSelectedOption" />
+          <NavigationProperty Name="Answer" Relationship="Model.FK_Answer_ToQuestionOption" FromRole="QuestionOption" ToRole="Answer" />
+        </EntityType>
+        <Association Name="FK_QuestionOption_ToQuestion">
+          <End Type="Model.Question" Role="Question" Multiplicity="1" />
+          <End Type="Model.QuestionOption" Role="QuestionOption" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Question">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="QuestionOption">
+              <PropertyRef Name="QuestionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Answer">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="QuestionId" Type="Int32" Nullable="false" />
+          <Property Name="AnswerTxt" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Question" Relationship="Model.FK_Answer_ToQuestion" FromRole="Answer" ToRole="Question" />
+          <NavigationProperty Name="AnswerSelectedOption" Relationship="Model.FK_AnswerSelectedOption_ToAnswer" FromRole="Answer" ToRole="AnswerSelectedOption" />
+          <Property Name="InterviewId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Interview" Relationship="Model.FK_Answer_ToInterview" FromRole="Answer" ToRole="Interview" />
+          <Property Name="SelectedOptionId" Type="Int32" />
+          <NavigationProperty Name="QuestionOption" Relationship="Model.FK_Answer_ToQuestionOption" FromRole="Answer" ToRole="QuestionOption" />
+        </EntityType>
+        <EntityType Name="AnswerSelectedOption">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="AnswerId" Type="Int32" Nullable="false" />
+          <Property Name="OptionId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Answer" Relationship="Model.FK_AnswerSelectedOption_ToAnswer" FromRole="AnswerSelectedOption" ToRole="Answer" />
+          <NavigationProperty Name="QuestionOption" Relationship="Model.FK_AnswerSelectedOption_ToQuestionOption" FromRole="AnswerSelectedOption" ToRole="QuestionOption" />
+        </EntityType>
+        <Association Name="FK_Answer_ToQuestion">
+          <End Type="Model.Question" Role="Question" Multiplicity="1" />
+          <End Type="Model.Answer" Role="Answer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Question">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Answer">
+              <PropertyRef Name="QuestionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AnswerSelectedOption_ToAnswer">
+          <End Type="Model.Answer" Role="Answer" Multiplicity="1" />
+          <End Type="Model.AnswerSelectedOption" Role="AnswerSelectedOption" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Answer">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AnswerSelectedOption">
+              <PropertyRef Name="AnswerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AnswerSelectedOption_ToQuestionOption">
+          <End Type="Model.QuestionOption" Role="QuestionOption" Multiplicity="1" />
+          <End Type="Model.AnswerSelectedOption" Role="AnswerSelectedOption" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="QuestionOption">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AnswerSelectedOption">
+              <PropertyRef Name="OptionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Answer_ToInterview">
+          <End Type="Model.Interview" Role="Interview" Multiplicity="1" />
+          <End Type="Model.Answer" Role="Answer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Interview">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Answer">
+              <PropertyRef Name="InterviewId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Answer_ToQuestionOption">
+          <End Type="Model.QuestionOption" Role="QuestionOption" Multiplicity="0..1" />
+          <End Type="Model.Answer" Role="Answer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="QuestionOption">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Answer">
+              <PropertyRef Name="SelectedOptionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="ModelStoreContainer" CdmEntityContainer="Entities" >
+          <EntitySetMapping Name="InterviewTemplate">
+            <EntityTypeMapping TypeName="Model.InterviewTemplate">
+              <MappingFragment StoreEntitySet="InterviewTemplate">
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Interview">
+            <EntityTypeMapping TypeName="Model.Interview">
+              <MappingFragment StoreEntitySet="Interview">
+                <ScalarProperty Name="InterviewTemplateId" ColumnName="InterviewTemplateId" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Question">
+            <EntityTypeMapping TypeName="Model.Question">
+              <MappingFragment StoreEntitySet="Question">
+                <ScalarProperty Name="InterviewTemplateId" ColumnName="InterviewTemplateId" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="QuestionTxt" ColumnName="QuestionTxt" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="QuestionOption">
+            <EntityTypeMapping TypeName="Model.QuestionOption">
+              <MappingFragment StoreEntitySet="QuestionOption">
+                <ScalarProperty Name="OptionTxt" ColumnName="OptionTxt" />
+                <ScalarProperty Name="QuestionId" ColumnName="QuestionId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Answer">
+            <EntityTypeMapping TypeName="Model.Answer">
+              <MappingFragment StoreEntitySet="Answer">
+                <ScalarProperty Name="SelectedOptionId" ColumnName="SelectedOptionId" />
+                <ScalarProperty Name="InterviewId" ColumnName="InterviewId" />
+                <ScalarProperty Name="AnswerTxt" ColumnName="AnswerTxt" />
+                <ScalarProperty Name="QuestionId" ColumnName="QuestionId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AnswerSelectedOption">
+            <EntityTypeMapping TypeName="Model.AnswerSelectedOption">
+              <MappingFragment StoreEntitySet="AnswerSelectedOption">
+                <ScalarProperty Name="OptionId" ColumnName="OptionId" />
+                <ScalarProperty Name="AnswerId" ColumnName="AnswerId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

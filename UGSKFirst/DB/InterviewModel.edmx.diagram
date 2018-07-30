@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="192170b5fd6d4a5bb0e3077965e6476f" Name="Diagram1" >
+        <EntityTypeShape EntityType="Model.InterviewTemplate" Width="1.5" PointX="0.75" PointY="0.75" />
+        <EntityTypeShape EntityType="Model.Interview" Width="1.5" PointX="3.5" PointY="0.75" />
+        <AssociationConnector Association="Model.FK_Interview_ToTemplate" />
+        <EntityTypeShape EntityType="Model.Question" Width="1.5" PointX="3.375" PointY="3.375" />
+        <AssociationConnector Association="Model.FK_Question_ToInterviewTemplate" />
+        <EntityTypeShape EntityType="Model.QuestionOption" Width="1.5" PointX="5.875" PointY="4.5" />
+        <AssociationConnector Association="Model.FK_QuestionOption_ToQuestion" />
+        <EntityTypeShape EntityType="Model.Answer" Width="1.5" PointX="5.875" PointY="0.625" />
+        <EntityTypeShape EntityType="Model.AnswerSelectedOption" Width="1.5" PointX="8.375" PointY="2.875" />
+        <AssociationConnector Association="Model.FK_Answer_ToQuestion" />
+        <AssociationConnector Association="Model.FK_AnswerSelectedOption_ToAnswer" />
+        <AssociationConnector Association="Model.FK_AnswerSelectedOption_ToQuestionOption" />
+        <AssociationConnector Association="Model.FK_Answer_ToInterview" />
+        <AssociationConnector Association="Model.FK_Answer_ToQuestionOption" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

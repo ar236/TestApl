@@ -1,0 +1,39 @@
+﻿@model UGSKFirst.Models.Page.InterviewViewPageModel
+
+@{
+    ViewBag.Title = "title";
+}
+
+<h2>Тест: @Model.Interview.InterviewTemplate.Name</h2>
+
+@foreach (var iAnswer in Model.Interview.Answer)
+{
+<div>
+    @Html.Label(iAnswer.Question.QuestionTxt)
+
+    @if (iAnswer.Question.Type == 1)
+    {
+        <div>
+            @iAnswer.AnswerTxt
+        </div>
+    }
+    else if (iAnswer.Question.Type == 2)
+    {
+        <div>
+            @iAnswer.QuestionOption.OptionTxt
+        </div>
+    }
+    else if (iAnswer.Question.Type == 3)
+    {
+        foreach (var answerSelectedOption in iAnswer.AnswerSelectedOption)
+        {
+            <div>
+                @answerSelectedOption.QuestionOption.OptionTxt
+            </div>
+        }
+    }
+</div>
+}
+
+
+
